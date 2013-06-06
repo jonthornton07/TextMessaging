@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/background_light"
@@ -9,26 +10,31 @@
         android:id="@+id/contact_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:contentDescription="@string/contact_picture"
-        android:src="@drawable/ic_contact_picture" 
-        android:layout_alignParentLeft="true"/>
+        android:src="@drawable/ic_contact_picture" />
 
     <TextView
         android:id="@+id/display_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/contact_display_name"
+        android:layout_alignBottom="@+id/contact_image"
+        android:layout_alignTop="@+id/contact_image"
         android:layout_toLeftOf="@+id/more"
         android:layout_toRightOf="@+id/contact_image"
+        android:gravity="center"
+        android:text="@string/contact_display_name"
         android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" 
+        android:layout_alignBottom="@+id/contact_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/contact_image"
+        android:background="@android:color/transparent"
         android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"
-        android:background="@android:color/transparent"/>
+        android:contentDescription="@string/contact_more" />
 
 </RelativeLayout>
