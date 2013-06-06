@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Text Messenger</string>
+    <string name="new_conversation">Start Conversation</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="drawer_open">Open</string>
+	<string name="drawer_close">Close</string>
+</resources>
