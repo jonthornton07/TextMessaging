@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+	<View 
+	    android:id="@+id/right_divider"
+    	android:layout_width="3dp"
+    	android:layout_height="match_parent"
+    	android:layout_alignParentRight="true"
+    	android:background="@android:color/darker_gray"/>
+	
+	<include layout="@layout/current_conversation_item"
+	    android:layout_toLeftOf="@+id/right_divider"/>
+</RelativeLayout>

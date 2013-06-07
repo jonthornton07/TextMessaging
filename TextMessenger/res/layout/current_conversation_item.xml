@@ -12,19 +12,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:contentDescription="@string/contact_picture"
-        android:src="@drawable/ic_contact_picture" />
+        android:src="@drawable/ic_contact_picture" 
+        android:layout_marginRight="5dp"/>
 
     <TextView
         android:id="@+id/display_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/contact_image"
         android:layout_alignTop="@+id/contact_image"
         android:layout_toLeftOf="@+id/more"
         android:layout_toRightOf="@+id/contact_image"
-        android:gravity="center"
         android:text="@string/contact_display_name"
-        android:textSize="20sp" />
+        android:textSize="20sp" 
+        android:paddingTop="5dp"
+        android:maxLines="1"/>
+    
+    <TextView
+        android:id="@+id/last_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/more"
+        android:layout_toRightOf="@+id/contact_image"
+        android:layout_below="@+id/display_name"
+        android:layout_alignBottom="@+id/contact_image"
+        android:maxLines="1"
+        android:text="@string/last_message"
+        android:textSize="15sp" 
+        android:gravity="bottom"/>
+    
+    
 
     <ImageButton
         android:id="@+id/more"
@@ -36,6 +52,7 @@
         android:layout_alignTop="@+id/contact_image"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"
-        android:contentDescription="@string/contact_more" />
+        android:contentDescription="@string/contact_more" 
+        android:layout_marginLeft="5dp"/>
 
 </RelativeLayout>
