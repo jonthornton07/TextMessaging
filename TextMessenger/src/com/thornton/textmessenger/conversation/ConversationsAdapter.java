@@ -1,16 +1,38 @@
 package com.thornton.textmessenger.conversation;
 
-import java.util.List;
-
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
-public class ConversationsAdapter extends ArrayAdapter<Contact>{
+import com.thornton.textmessenger.R;
+import com.thornton.textmessenger.database.Conversation;
+import com.thornton.textmessenger.database.Message;
 
-	public ConversationsAdapter(final Context context, final int resource,
-			final int textViewResourceId, final List<Contact> objects) {
-		super(context, resource, textViewResourceId, objects);
-		// TODO: Do stuff here
+public class ConversationsAdapter extends ArrayAdapter<Message>{
+
+	private final Context context;
+	private final Conversation conversation;
+
+	public ConversationsAdapter(final Context context, final int resource,final Conversation conversation) {
+		super(context, resource, conversation.getMessages());
+		this.context = context;
+		this.conversation = conversation;
+	}
+
+	@Override
+	public View getView(final int position, final View convertView, final ViewGroup parent) {
+		final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View rowView = inflater.inflate(R.layout.conversation_bubble, parent, false);
+		final TextView text = (TextView) rowView.findViewById(R.id.message_text);
+		final TextView time = (TextView) rowView.findViewById(R.id.message_time);
+
+		text.setText(conversation.getMessages().get(position).getText());
+		time.setText(conversation.getMessages().get(position).getTime());
+
+		return rowView;
 	}
 
 }

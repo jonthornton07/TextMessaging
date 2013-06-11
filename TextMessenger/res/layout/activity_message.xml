@@ -19,7 +19,7 @@
 
         <fragment
             android:id="@+id/list_pane"
-            android:name="com.thornton.textmessenger.conversation.ConversationsList"
+            android:name="com.thornton.textmessenger.conversation.ConversationsFragment"
             android:layout_width="280dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"/>

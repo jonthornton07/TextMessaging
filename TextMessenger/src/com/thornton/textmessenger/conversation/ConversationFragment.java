@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thornton.textmessenger.R;
+import com.thornton.textmessenger.database.Conversation;
 
-public class ConversationsList extends Fragment implements LoaderCallbacks<Cursor>{
+public class ConversationFragment extends Fragment implements LoaderCallbacks<Cursor>{
+
+	private Conversation conversation;
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -24,7 +27,7 @@ public class ConversationsList extends Fragment implements LoaderCallbacks<Curso
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
 			final Bundle savedInstanceState) {
 		//TODO: Remove this, this is just for stubbing stuff out
-		final View view = inflater.inflate(R.layout.conversations_fragment, null);
+		final View view = inflater.inflate(R.layout.conversation_fragment, null);
 
 		return view;
 	}
@@ -45,5 +48,12 @@ public class ConversationsList extends Fragment implements LoaderCallbacks<Curso
 	public void onLoaderReset(final Loader<Cursor> arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setContact(final Contact contact){
+		if(conversation == null){
+			conversation = new Conversation(contact);
+		}
+		//TOOD: Load conversations for that contact
 	}
 }

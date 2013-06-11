@@ -10,22 +10,36 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.thornton.textmessenger.conversation.ContactSelectorFragment;
+import com.thornton.textmessenger.conversation.ConversationFragment;
+import com.thornton.textmessenger.conversation.ConversationsFragment;
 
 public class MessageActivity extends FragmentActivity {
 
 	private SlidingPaneLayout mSlidingLayout;
 	private ActionBar mActionBar;
+	private ConversationFragment conversation;
+	private ConversationsFragment conversations;
+	private ContactSelectorFragment contacts;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message);
-		final ContactSelectorFragment fragment = new ContactSelectorFragment();
+		initFragments();
 
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, fragment).commit();
+		.replace(R.id.content_frame, contacts).commit();
 
 		setUpActionBar();
+	}
+
+	private void initFragments(){
+		contacts = new ContactSelectorFragment();
+		conversations = new ConversationsFragment();
+		conversation = new ConversationFragment();
+		contacts.setArguments(new Bundle());
+		conversations.setArguments(new Bundle());
+		conversation.setArguments(new Bundle());
 	}
 
 	@Override
@@ -60,6 +74,7 @@ public class MessageActivity extends FragmentActivity {
 
 		mActionBar.setHomeButtonEnabled(true);
 		mActionBar.setDisplayHomeAsUpEnabled(true);
+		mSlidingLayout.openPane();
 		mSlidingLayout.setPanelSlideListener(new PanelSlideListener() {
 
 			@Override
@@ -68,24 +83,24 @@ public class MessageActivity extends FragmentActivity {
 					getSupportFragmentManager().findFragmentById(
 							R.id.content_frame).setHasOptionsMenu(false);
 					getSupportFragmentManager()
-							.findFragmentById(R.id.list_pane)
-							.setHasOptionsMenu(true);
+					.findFragmentById(R.id.list_pane)
+					.setHasOptionsMenu(true);
 				} else {
 					getSupportFragmentManager().findFragmentById(
 							R.id.content_frame).setHasOptionsMenu(true);
 					getSupportFragmentManager()
-							.findFragmentById(R.id.list_pane)
-							.setHasOptionsMenu(false);
+					.findFragmentById(R.id.list_pane)
+					.setHasOptionsMenu(false);
 				}
 			}
 
 			@Override
 			public void onPanelClosed(final View panel) {
 				getSupportFragmentManager()
-						.findFragmentById(R.id.content_frame)
-						.setHasOptionsMenu(true);
+				.findFragmentById(R.id.content_frame)
+				.setHasOptionsMenu(true);
 				getSupportFragmentManager().findFragmentById(R.id.list_pane)
-						.setHasOptionsMenu(false);
+				.setHasOptionsMenu(false);
 			}
 
 			@Override

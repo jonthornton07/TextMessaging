@@ -15,4 +15,6 @@ public class MessageTable {
 	//TODO: Create the table
 	public static final String TABLE_CREATE_SQL = "";
 
+	public static final String TABLE_DROP_SQL = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
 }
