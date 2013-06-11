@@ -10,5 +10,9 @@
 	<string name="contact_display_name">Display Name</string>
 	<string name="contact_more">More</string>
 	<string name="last_message">Last Message</string>
+	<string name="message_text">Message Text</string>
+	<string name="message_time">6/10/2013 5:31 PM</string>
+	<string name="message_box_hint">Enter Text</string>
+	<string name="message_send">Send</string>
 	
 </resources>

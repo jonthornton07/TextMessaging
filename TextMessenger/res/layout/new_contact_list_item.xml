@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:padding="2dp" >
 
-    <ImageView
+    <QuickContactBadge
         android:id="@+id/contact_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

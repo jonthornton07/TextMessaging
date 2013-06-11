@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <ListView
+        android:id="@+id/message_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/divider"
+        android:padding="2dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_above="@+id/message_text_box"
+        android:background="@android:color/darker_gray" />
+
+    <EditText
+        android:id="@+id/message_text_box"
+        style="?android:editTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/message_send"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/message_send"
+        android:layout_toLeftOf="@+id/message_send"
+        android:inputType="textShortMessage"
+        android:padding="2dp"
+        android:text="@string/message_box_hint" />
+
+    <Button
+        android:id="@+id/message_send"
+        style="?android:buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:padding="2dp"
+        android:text="@string/message_send" />
+
+</RelativeLayout>
