@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ListFragment;
@@ -25,12 +26,18 @@ LoaderCallbacks<Cursor> {
 
 	// TODO: Maybe use the photo URI to get the photo
 	static final String[] PROJECTION = new String[] {
-		ContactsContract.Data._ID, ContactsContract.Data.DISPLAY_NAME, ContactsContract.Data.HAS_PHONE_NUMBER };
+		ContactsContract.CommonDataKinds.Phone._ID, ContactsContract.CommonDataKinds.Phone.NUMBER,
+		ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME ,
+		ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI};
 
 	// This is the select criteria
-	static final String SELECTION = "((" + ContactsContract.Data.DISPLAY_NAME
-			+ " NOTNULL) AND (" + ContactsContract.Data.DISPLAY_NAME
-			+ " != '' ))";
+	//	static final String SELECTION = "((" + ContactsContract.Data.DISPLAY_NAME
+	//			+ " NOTNULL) AND (" + ContactsContract.Data.DISPLAY_NAME
+	//			+ " != '' ))";
+
+	static final String SELECTION = "(" + ContactsContract.CommonDataKinds.Phone.NUMBER
+			+ " != '') AND (" + ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+			+ " != '' )";
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -47,8 +54,8 @@ LoaderCallbacks<Cursor> {
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 		return new CursorLoader(getActivity(),
-				ContactsContract.Data.CONTENT_URI, PROJECTION, SELECTION, null,
-				null);
+				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PROJECTION, SELECTION, null,
+				ContactsContract.CommonDataKinds.Phone.TIMES_CONTACTED + " DESC");
 	}
 
 	// Called when a previously created loader has finished loading
@@ -69,19 +76,25 @@ LoaderCallbacks<Cursor> {
 		String id;
 		String name;
 		String number = "";
+		String uriPath;
+		Uri uri = null;
+		Contact previous = null;
 		while(data.moveToNext()){
-			id = data.getString(data.getColumnIndex(ContactsContract.Contacts._ID));
-			name = data.getString(data.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-			if (Integer.parseInt(data.getString(data.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-				final Cursor pCur = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
-
-				while (pCur.moveToNext()) {
-					number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				}
-				pCur.close();
-
+			name = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+			if((null != previous) && previous.getDisplayName().equals(name)){
+				continue;
 			}
-			contacts.add(new Contact(id, name, number));
+			id = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
+			number = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+			uriPath = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+			if(null != uriPath){
+				uri = Uri.parse(uriPath);
+			}else{
+				uri = null;
+			}
+			final Contact contact = new Contact(id, name, number, uri);
+			contacts.add(contact);
+			previous = contact;
 		}
 
 		data.close();

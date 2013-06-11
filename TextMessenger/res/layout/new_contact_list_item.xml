@@ -4,15 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="2dp" >
+    android:padding="2dp" 
+    android:focusable="true">
 
-    <QuickContactBadge
+    <ImageView
         android:id="@+id/contact_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:contentDescription="@string/contact_picture"
-        android:src="@drawable/ic_contact_picture" />
+        android:src="@drawable/ic_contact_picture" 
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/display_name"

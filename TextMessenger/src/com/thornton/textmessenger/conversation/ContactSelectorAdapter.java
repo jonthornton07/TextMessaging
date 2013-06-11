@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import com.thornton.textmessenger.R;
@@ -31,10 +30,10 @@ public class ContactSelectorAdapter extends ArrayAdapter<Contact> {
 	public View getView(final int position, final View convertView, final ViewGroup parent) {
 		final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View rowView = inflater.inflate(R.layout.new_contact_list_item, parent, false);
-		final QuickContactBadge contactImage = (QuickContactBadge) rowView.findViewById(R.id.contact_image);
+		final ImageView contactImage = (ImageView) rowView.findViewById(R.id.contact_image);
 		final TextView textView = (TextView) rowView.findViewById(R.id.display_name);
 		final ImageView imageView = (ImageView) rowView.findViewById(R.id.more);
-		contactImage.assignContactFromPhone(contacts.get(position).getPhoneNumber(), false);
+		contactImage.setImageURI(contacts.get(position).getThumb());
 		textView.setText(contacts.get(position).getDisplayName());
 		imageView.setOnClickListener(new OnClickListener(){
 

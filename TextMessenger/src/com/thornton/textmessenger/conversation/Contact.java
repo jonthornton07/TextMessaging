@@ -14,13 +14,15 @@ public class Contact {
 	private String id;
 	private String displayName;
 	private String phoneNumber;
+	private Uri thumb;
 
 	// TODO: Get the users image (not sure how to store this);
 
-	public Contact(final String id, final String displayName, final String phoneNumber) {
+	public Contact(final String id, final String displayName, final String phoneNumber, final Uri thumb) {
 		setId(id);
 		setDisplayName(displayName);
 		setPhoneNumber(phoneNumber);
+		setThumb(thumb);
 	}
 
 	/**
@@ -86,5 +88,19 @@ public class Contact {
 			cursor.close();
 		}
 		return null;
+	}
+
+	/**
+	 * @return the thumb
+	 */
+	public Uri getThumb() {
+		return thumb;
+	}
+
+	/**
+	 * @param thumb the thumb to set
+	 */
+	public void setThumb(final Uri thumb) {
+		this.thumb = thumb;
 	}
 }
