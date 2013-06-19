@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.thornton.textmessenger.R;
 
-public class ConversationsFragment extends Fragment implements LoaderCallbacks<Cursor>{
+public class ConversationsFragment extends Fragment implements LoaderCallbacks<Cursor>, ConversationObservable{
+
+	private ConversationObserver observer;
+
+	private static final String TAG = ConversationsFragment.class.getSimpleName();
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -45,5 +50,21 @@ public class ConversationsFragment extends Fragment implements LoaderCallbacks<C
 	public void onLoaderReset(final Loader<Cursor> arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void notifyObserver(final Contact contact) {
+		if(null != observer){
+			observer.contactClicked(contact);
+		}
+		//TODO: Remove the else;
+		else{
+			Log.i(TAG, "No observer registered");
+		}
+	}
+
+	@Override
+	public void setObserver(final ConversationObserver observer) {
+		this.observer = observer;
 	}
 }

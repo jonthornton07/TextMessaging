@@ -5,11 +5,22 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+/**
+ * Content provider for getting data from the message table in the application.
+ * @author jthornton
+ *
+ */
 public class MessageContentProvider extends ContentProvider{
+
+	/**Tag for the logging*/
 	private static final String TAG = MessageContentProvider.class.getSimpleName();
 
+	/**Authority for the content provider*/
 	public static final String AUTHORITY = "com.thornton.textmessenger.database.MessageContentProvider";
+
+	/**Content URI for the content provider*/
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/messages");
+
 	@Override
 	public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
 		// TODO: Implement Me

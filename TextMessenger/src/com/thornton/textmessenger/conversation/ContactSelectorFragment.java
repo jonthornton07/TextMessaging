@@ -11,16 +11,21 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 import com.thornton.textmessenger.R;
 
 public class ContactSelectorFragment extends ListFragment implements
-LoaderCallbacks<Cursor> {
+LoaderCallbacks<Cursor>, ConversationObservable {
+
+	private static final String TAG = ContactSelectorFragment.class.getSimpleName();
 
 	// This is the Adapter being used to display the list's data
 	ContactSelectorAdapter mAdapter;
+
+	ConversationObserver observer;
 
 	// These are the Contacts rows that we will retrieve
 
@@ -81,7 +86,7 @@ LoaderCallbacks<Cursor> {
 		Contact previous = null;
 		while(data.moveToNext()){
 			name = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-			if((null != previous) && previous.getDisplayName().equals(name)){
+			if(null != previous && previous.getDisplayName().equals(name)){
 				continue;
 			}
 			id = data.getString(data.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
@@ -115,5 +120,22 @@ LoaderCallbacks<Cursor> {
 	public void onListItemClick(final ListView l, final View v,
 			final int position, final long id) {
 		// Do something when a list item is clicked
+	}
+
+
+	@Override
+	public void notifyObserver(final Contact contact) {
+		if(null != observer){
+			observer.contactClicked(contact);
+		}
+		//TODO: Remove the else;
+		else{
+			Log.i(TAG, "No observer registered");
+		}
+	}
+
+	@Override
+	public void setObserver(final ConversationObserver observer) {
+		this.observer = observer;
 	}
 }
