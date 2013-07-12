@@ -3,9 +3,10 @@
     style="?android:selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="horizontal"
-    android:padding="2dp" 
-    android:focusable="true">
+    android:padding="2dp" >
 
     <ImageView
         android:id="@+id/contact_image"
@@ -13,8 +14,8 @@
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:contentDescription="@string/contact_picture"
-        android:src="@drawable/ic_contact_picture" 
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_contact_picture" />
 
     <TextView
         android:id="@+id/display_name"
@@ -37,7 +38,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/contact_image"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"
-        android:contentDescription="@string/contact_more" />
+        android:contentDescription="@string/contact_more"
+        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light" />
 
 </RelativeLayout>

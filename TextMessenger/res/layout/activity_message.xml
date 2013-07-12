@@ -17,12 +17,10 @@
          overlap the left.
         -->
 
-        <fragment
+        <FrameLayout
             android:id="@+id/list_pane"
-            android:name="com.thornton.textmessenger.conversation.ConversationsFragment"
             android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"/>
+            android:layout_height="match_parent"/>
 
         <!--
          The second child becomes the right (content) pane. In this

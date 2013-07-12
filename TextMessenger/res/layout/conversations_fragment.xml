@@ -10,6 +10,12 @@
     	android:layout_alignParentRight="true"
     	android:background="@android:color/darker_gray"/>
 	
-	<include layout="@layout/current_conversation_item"
-	    android:layout_toLeftOf="@+id/right_divider"/>
+	<ListView
+	    android:id="@+id/conversations_list"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:layout_toLeftOf="@+id/right_divider"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_alignParentBottom="true"/>
 </RelativeLayout>

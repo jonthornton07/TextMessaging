@@ -2,28 +2,47 @@ package com.thornton.textmessenger;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v4.widget.SlidingPaneLayout.PanelSlideListener;
+import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.thornton.textmessenger.conversation.Contact;
-import com.thornton.textmessenger.conversation.ContactSelectorFragment;
 import com.thornton.textmessenger.conversation.ConversationFragment;
-import com.thornton.textmessenger.conversation.ConversationObserver;
-import com.thornton.textmessenger.conversation.ConversationsFragment;
+import com.thornton.textmessenger.conversation.existing.ConversationsFragment;
+import com.thornton.textmessenger.conversation.select.ContactSelectorFragment;
+import com.thornton.textmessenger.database.StorageHelper;
+import com.thornton.textmessenger.database.bo.Conversation;
+import com.thornton.textmessenger.database.bo.Message;
+import com.thornton.textmessenger.interfaces.ConversationObserver;
+import com.thornton.textmessenger.interfaces.MessageObserver;
+import com.thornton.textmessenger.receiver.BaseReceiver;
+import com.thornton.textmessenger.receiver.DeliveryReceiver;
+import com.thornton.textmessenger.receiver.IntentReceiver;
+import com.thornton.textmessenger.receiver.SendReceiver;
 
-public class MessageActivity extends FragmentActivity implements ConversationObserver {
+
+public class MessageActivity extends FragmentActivity implements ConversationObserver, MessageObserver {
+
+
+	private PendingIntent sendPendingIntent, deliveredPendingIntent;
+
+	private IntentFilter filter;
+
+	private BaseReceiver intentReceiver, sentReceiver, deliveredReceiver;
 
 	private SlidingPaneLayout drawer;
-	private ActionBar mActionBar;
-	private ConversationFragment conversation;
-	private ConversationsFragment conversations;
-	private ContactSelectorFragment contacts;
+	private ActionBar actionBar;
+	private ConversationFragment conversationFragment;
+	private ConversationsFragment conversationsFragment;
+	private ContactSelectorFragment newConversationFragment;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -32,18 +51,62 @@ public class MessageActivity extends FragmentActivity implements ConversationObs
 		initFragments();
 
 		getSupportFragmentManager().beginTransaction()
-		.replace(R.id.content_frame, contacts).commit();
+		.replace(R.id.content_frame, newConversationFragment).commit();
+
+		getSupportFragmentManager().beginTransaction()
+		.replace(R.id.list_pane, conversationsFragment).commit();
 
 		setUpActionBar();
+
+		sendPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(BaseReceiver.SENT), 0);
+		deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(BaseReceiver.DELIVERED), 0);
+
+		filter = new IntentFilter();
+		filter.addAction(BaseReceiver.SMS_RECEIVED_ACTION);
+
+		intentReceiver = new IntentReceiver(this);
+		registerReceiver(intentReceiver, filter);
+	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+
+		sentReceiver = new SendReceiver();
+		deliveredReceiver = new DeliveryReceiver();
+
+		registerReceiver(sentReceiver, new IntentFilter(BaseReceiver.SENT));
+		registerReceiver(deliveredReceiver, new IntentFilter(BaseReceiver.DELIVERED));
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+
+		unregisterReceiver(sentReceiver);
+		unregisterReceiver(deliveredReceiver);
+		unregisterReceiver(intentReceiver);
+
+		newConversationFragment.setObserver(null);
+		conversationsFragment.setObserver(null);
+		conversationFragment.setMessageObserver(null);
 	}
 
 	private void initFragments(){
-		contacts = new ContactSelectorFragment();
-		conversations = new ConversationsFragment();
-		conversation = new ConversationFragment();
-		contacts.setArguments(new Bundle());
-		conversations.setArguments(new Bundle());
-		conversation.setArguments(new Bundle());
+		newConversationFragment = new ContactSelectorFragment();
+		conversationsFragment = new ConversationsFragment();
+		conversationFragment = new ConversationFragment();
+		newConversationFragment.setArguments(new Bundle());
+		conversationsFragment.setArguments(new Bundle());
+		conversationFragment.setArguments(new Bundle());
+		newConversationFragment.setObserver(this);
+		conversationsFragment.setObserver(this);
+		conversationFragment.setMessageObserver(this);
 	}
 
 	@Override
@@ -73,11 +136,11 @@ public class MessageActivity extends FragmentActivity implements ConversationObs
 
 	@SuppressLint("NewApi")
 	private void setUpActionBar() {
-		mActionBar = getActionBar();
+		actionBar = getActionBar();
 		drawer = (SlidingPaneLayout) findViewById(R.id.sliding_pane_layout);
 
-		mActionBar.setHomeButtonEnabled(true);
-		mActionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		drawer.openPane();
 		drawer.setPanelSlideListener(new PanelSlideListener() {
 
@@ -115,18 +178,36 @@ public class MessageActivity extends FragmentActivity implements ConversationObs
 	}
 
 	@Override
-	public void contactClicked(final Contact contact) {
-		//TODO: Implement Me
+	public void conversationStarted(final Conversation conversation) {
 		drawer.closePane();
-		//makeFragmentVisible(conversation);
-		Toast.makeText(this, "Contact clicked: " + contact.getDisplayName(), 3000).show();
-
+		conversationFragment.setConversation(conversation);
+		makeFragmentVisible(conversationFragment);
+		actionBar.setTitle(conversation.getContact().getDisplayName());
 	}
 
 	private void makeFragmentVisible(final Fragment fragment){
 		getSupportFragmentManager().beginTransaction().
 		replace(R.id.content_frame, fragment).addToBackStack(fragment.getClass().getSimpleName())
 		.commit();
+	}
+
+	@Override
+	public void sendMessage(final Message message){
+		final SmsManager manager = SmsManager.getDefault();
+
+		if(TextUtils.isEmpty(message.getText())){return;}
+		manager.sendTextMessage(message.getPhoneNumber(), null, message.getText().toString(), sendPendingIntent, deliveredPendingIntent);
+		storeMessage(message);
+	}
+
+	@Override
+	public void storeMessage(final Message message){
+		StorageHelper.insertMessage(this, message);
+	}
+
+	@Override
+	public void receiveNewMessage(final Message message) {
+		if(null != conversationFragment) {conversationFragment.receiveNewMessage(message);}
 	}
 
 }

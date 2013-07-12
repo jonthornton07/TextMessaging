@@ -3,17 +3,19 @@
     style="?android:selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     android:orientation="horizontal"
     android:padding="2dp" >
 
     <ImageView
         android:id="@+id/contact_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dp"
         android:contentDescription="@string/contact_picture"
-        android:src="@drawable/ic_contact_picture" 
-        android:layout_marginRight="5dp"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_contact_picture" />
 
     <TextView
         android:id="@+id/display_name"
@@ -22,25 +24,24 @@
         android:layout_alignTop="@+id/contact_image"
         android:layout_toLeftOf="@+id/more"
         android:layout_toRightOf="@+id/contact_image"
-        android:text="@string/contact_display_name"
-        android:textSize="20sp" 
+        android:maxLines="1"
         android:paddingTop="5dp"
-        android:maxLines="1"/>
-    
+        android:text="@string/contact_display_name"
+        android:textSize="20sp" />
+
     <TextView
         android:id="@+id/last_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/contact_image"
+        android:layout_below="@+id/display_name"
         android:layout_toLeftOf="@+id/more"
         android:layout_toRightOf="@+id/contact_image"
-        android:layout_below="@+id/display_name"
-        android:layout_alignBottom="@+id/contact_image"
+        android:clickable="false"
+        android:gravity="bottom"
         android:maxLines="1"
         android:text="@string/last_message"
-        android:textSize="15sp" 
-        android:gravity="bottom"/>
-    
-    
+        android:textSize="15sp" />
 
     <ImageButton
         android:id="@+id/more"
@@ -50,9 +51,9 @@
         android:layout_alignBottom="@+id/contact_image"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/contact_image"
+        android:layout_marginLeft="5dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"
-        android:contentDescription="@string/contact_more" 
-        android:layout_marginLeft="5dp"/>
+        android:contentDescription="@string/contact_more"
+        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light" />
 
 </RelativeLayout>

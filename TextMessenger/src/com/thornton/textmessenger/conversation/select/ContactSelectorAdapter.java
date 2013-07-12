@@ -1,4 +1,4 @@
-package com.thornton.textmessenger.conversation;
+package com.thornton.textmessenger.conversation.select;
 
 import java.util.List;
 
@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thornton.textmessenger.R;
+import com.thornton.textmessenger.database.bo.Contact;
+import com.thornton.textmessenger.database.bo.Conversation;
+import com.thornton.textmessenger.interfaces.ConversationObservable;
 
 public class ContactSelectorAdapter extends ArrayAdapter<Contact> {
 
@@ -19,11 +22,14 @@ public class ContactSelectorAdapter extends ArrayAdapter<Contact> {
 
 	private final List<Contact> contacts;
 
+	private final ConversationObservable observerable;
+
 	public ContactSelectorAdapter(final Context context,
-			final int textViewResourceId, final List<Contact> contacts) {
+			final int textViewResourceId, final List<Contact> contacts, final ConversationObservable observerable) {
 		super(context, textViewResourceId, contacts);
 		this.context = context;
 		this.contacts = contacts;
+		this.observerable = observerable;
 	}
 
 	@Override
@@ -43,6 +49,15 @@ public class ContactSelectorAdapter extends ArrayAdapter<Contact> {
 
 			}
 
+		});
+
+		textView.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(final View v) {
+				final Contact contact = getItem(position);
+				final Conversation conversation = new Conversation(contact);
+				observerable.notifyObserver(conversation);
+			}
 		});
 
 		return rowView;

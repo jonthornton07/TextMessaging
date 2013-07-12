@@ -1,4 +1,4 @@
-package com.thornton.textmessenger.conversation;
+package com.thornton.textmessenger.conversation.select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +11,17 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 import com.thornton.textmessenger.R;
+import com.thornton.textmessenger.database.bo.Contact;
+import com.thornton.textmessenger.database.bo.Conversation;
+import com.thornton.textmessenger.interfaces.ConversationObservable;
+import com.thornton.textmessenger.interfaces.ConversationObserver;
 
 public class ContactSelectorFragment extends ListFragment implements
 LoaderCallbacks<Cursor>, ConversationObservable {
-
-	private static final String TAG = ContactSelectorFragment.class.getSimpleName();
 
 	// This is the Adapter being used to display the list's data
 	ContactSelectorAdapter mAdapter;
@@ -35,10 +36,11 @@ LoaderCallbacks<Cursor>, ConversationObservable {
 		ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME ,
 		ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI};
 
-	// This is the select criteria
-	//	static final String SELECTION = "((" + ContactsContract.Data.DISPLAY_NAME
-	//			+ " NOTNULL) AND (" + ContactsContract.Data.DISPLAY_NAME
-	//			+ " != '' ))";
+	/**
+	 * TODO: I need to get all the contacts numbers.  So if a contact has more than one number,
+	 * then I need to show a drop down of some sorts to allow the user to select a contact number
+	 * that they want to text.
+	 */
 
 	static final String SELECTION = "(" + ContactsContract.CommonDataKinds.Phone.NUMBER
 			+ " != '') AND (" + ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
@@ -72,7 +74,7 @@ LoaderCallbacks<Cursor>, ConversationObservable {
 
 		// Create an empty adapter we will use to display the loaded data.
 		// We pass null for the cursor, then update it in onLoadFinished()
-		mAdapter = new ContactSelectorAdapter(getActivity(), R.layout.new_contact_list_item, convertToContacts(data));
+		mAdapter = new ContactSelectorAdapter(getActivity(), R.layout.new_contact_list_item, convertToContacts(data), this);
 		setListAdapter(mAdapter);
 	}
 
@@ -97,6 +99,9 @@ LoaderCallbacks<Cursor>, ConversationObservable {
 			}else{
 				uri = null;
 			}
+			if(number.length() > 10){
+				number = number.substring(1, 11);
+			}
 			final Contact contact = new Contact(id, name, number, uri);
 			contacts.add(contact);
 			previous = contact;
@@ -119,18 +124,14 @@ LoaderCallbacks<Cursor>, ConversationObservable {
 	@Override
 	public void onListItemClick(final ListView l, final View v,
 			final int position, final long id) {
-		// Do something when a list item is clicked
+
 	}
 
 
 	@Override
-	public void notifyObserver(final Contact contact) {
+	public void notifyObserver(final Conversation conversation) {
 		if(null != observer){
-			observer.contactClicked(contact);
-		}
-		//TODO: Remove the else;
-		else{
-			Log.i(TAG, "No observer registered");
+			observer.conversationStarted(conversation);
 		}
 	}
 

@@ -2,7 +2,6 @@ package com.thornton.textmessenger.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -19,6 +18,9 @@ public class MessagingDatabase extends SQLiteOpenHelper{
 	/**SQLite Database being used by the application*/
 	private SQLiteDatabase database;
 
+	private static final String DATABASE_NAME = "messages.db";
+	private static final int DATABASE_VERSION = 3;
+
 	/**
 	 * Constructor for the database
 	 * @param context - activity context
@@ -26,9 +28,8 @@ public class MessagingDatabase extends SQLiteOpenHelper{
 	 * @param factory - cursor factory
 	 * @param version - version of the database
 	 */
-	public MessagingDatabase(final Context context, final String name,
-			final CursorFactory factory, final int version) {
-		super(context, name, factory, version);
+	public MessagingDatabase(final Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	/**

@@ -1,10 +1,10 @@
-package com.thornton.textmessenger.database;
+package com.thornton.textmessenger.database.bo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thornton.textmessenger.conversation.Contact;
+
 
 public class Conversation implements Serializable{
 

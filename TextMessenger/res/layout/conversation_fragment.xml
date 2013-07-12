@@ -10,6 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/divider"
+        android:stackFromBottom="true"
         android:padding="2dp" />
 
     <View
@@ -29,9 +30,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/message_send"
         android:layout_toLeftOf="@+id/message_send"
-        android:inputType="textShortMessage"
         android:padding="2dp"
-        android:text="@string/message_box_hint" />
+        android:hint="@string/message_box_hint"
+        android:inputType="textCapSentences" />
 
     <Button
         android:id="@+id/message_send"
